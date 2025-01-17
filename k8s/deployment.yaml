@@ -1,0 +1,38 @@
+#versão da api que estou utilizando
+#kubectl api-resources
+apiVersion: apps/v1
+
+#pega da lista api-resources
+kind: Deployment
+
+metadata:
+  name: conversao-distancia
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: conversao-distancia
+  template:
+    metadata:
+      labels: 
+        app: conversao-distancia
+    spec:
+      containers:
+      - name: conversao-distancia
+        image: juliabfluz/conversao-distancia:v2
+        ports:
+          - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: conversao-distancia
+spec:
+  selector:
+    app: conversao-distancia
+  ports:
+  - port: 80
+    targetPort: 5000
+    nodePort: 30000
+  type: NodePort
